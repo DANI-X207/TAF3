@@ -36,7 +36,7 @@
       <div class="field-group">
         <label>Mot de passe</label>
         <div class="password-wrap">
-          <input type="password" id="loginPassword" required placeholder="Votre mot de passe" />
+          <input type="password" id="loginPassword" required placeholder="Votre mot de passe" autocomplete="current-password" />
           <button type="button" class="toggle-pw" onclick="togglePw('loginPassword')">👁</button>
         </div>
       </div>
@@ -64,7 +64,7 @@
       <div class="field-group">
         <label>Mot de passe *</label>
         <div class="password-wrap">
-          <input type="password" id="regPassword" required placeholder="Minimum 6 caractères" />
+          <input type="password" id="regPassword" required placeholder="Minimum 6 caractères" autocomplete="new-password" />
           <button type="button" class="toggle-pw" onclick="togglePw('regPassword')">👁</button>
         </div>
         <div class="pw-strength" id="pwStrength"></div>
@@ -519,7 +519,7 @@
     <div class="field-group mt-1">
       <label>Mot de passe administrateur</label>
       <div class="password-wrap">
-        <input type="password" id="adminPwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doAdminLogin()" />
+        <input type="password" id="adminPwd" placeholder="Mot de passe" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAdminLogin()" />
         <button type="button" class="toggle-pw" onclick="togglePw('adminPwd')">👁</button>
       </div>
     </div>
