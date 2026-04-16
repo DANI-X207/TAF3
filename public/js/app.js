@@ -11,6 +11,9 @@ let isAdmin = false;
 let currentCategory = 'all';
 let currentOrderId = null;
 let cancelTimer = null;
+let sliderBooks = [];
+let currentSlide = 0;
+let sliderTimer = null;
 const BRAND_LOGO = '/assets/magma-logo.jpeg';
 
 // ─── Bootstrap ────────────────────────────────────────────────────────────────
@@ -233,7 +236,76 @@ document.addEventListener('click', e => {
 
 // ─── HOME ─────────────────────────────────────────────────────────────────────
 async function loadHome() {
-  await Promise.all([loadHomeBooks(), loadHomeCats(), loadAds()]);
+  await Promise.all([loadHomeSlider(), loadHomeBooks(), loadHomeCats(), loadAds()]);
+}
+
+async function loadHomeSlider() {
+  const books = await api('/api/books');
+  sliderBooks = books.slice(0, 5);
+  currentSlide = 0;
+  renderSlider();
+  startSlider();
+}
+
+function renderSlider() {
+  const track = document.getElementById('sliderTrack');
+  const dots = document.getElementById('sliderDots');
+  const slider = document.getElementById('bookSlider');
+  if (!track || !dots || !slider) return;
+  if (!sliderBooks.length) {
+    slider.style.display = 'none';
+    return;
+  }
+  slider.style.display = 'block';
+  track.innerHTML = sliderBooks.map((b, i) => `
+    <article class="slider-slide ${i === currentSlide ? 'active' : ''}">
+      <div class="slider-cover" onclick="openBook(${b.id})">
+        ${b.image_url
+          ? `<img src="${b.image_url}" alt="${esc(b.title)}" />`
+          : `<div class="sample-cover"><img src="${BRAND_LOGO}" alt="Magma" /><span>${esc(b.category)}</span></div>`}
+      </div>
+      <div class="slider-copy">
+        <span class="slider-kicker">${esc(b.category)}</span>
+        <h3>${esc(b.title)}</h3>
+        <p class="slider-author">par ${esc(b.author)}</p>
+        <p class="slider-desc">${esc((b.description || 'Un livre sélectionné pour enrichir votre bibliothèque.').slice(0, 170))}${(b.description || '').length > 170 ? '…' : ''}</p>
+        <div class="slider-actions">
+          <button class="btn-primary sm" onclick="openBook(${b.id})">Voir le livre</button>
+          <button class="btn-outline" onclick="addToCart(${b.id},'${esc(b.title)}','${esc(b.author)}',${b.price},'${b.image_url || ''}')">Ajouter au panier</button>
+        </div>
+      </div>
+    </article>
+  `).join('');
+  dots.innerHTML = sliderBooks.map((_, i) => `
+    <button class="slider-dot ${i === currentSlide ? 'active' : ''}" onclick="goToSlide(${i})" aria-label="Afficher la slide ${i + 1}"></button>
+  `).join('');
+}
+
+function startSlider() {
+  if (sliderTimer) clearInterval(sliderTimer);
+  if (sliderBooks.length <= 1) return;
+  sliderTimer = setInterval(() => {
+    nextSlide(false);
+  }, 5000);
+}
+
+function resetSliderTimer() {
+  startSlider();
+}
+
+function goToSlide(index, reset = true) {
+  if (!sliderBooks.length) return;
+  currentSlide = (index + sliderBooks.length) % sliderBooks.length;
+  renderSlider();
+  if (reset) resetSliderTimer();
+}
+
+function nextSlide(reset = true) {
+  goToSlide(currentSlide + 1, reset);
+}
+
+function prevSlide() {
+  goToSlide(currentSlide - 1);
 }
 
 async function loadHomeBooks() {
