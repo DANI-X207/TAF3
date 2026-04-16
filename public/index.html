@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Librairie Mayombe</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════
+     AUTH WALL — shown when not logged in
+════════════════════════════════════════════════════════ -->
+<div id="authWall" class="auth-wall">
+  <div class="auth-brand">
+    <div class="auth-logo">📚</div>
+    <h1>Librairie Mayombe</h1>
+    <p>Votre destination livres en ligne à Pointe-Noire</p>
+  </div>
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Se connecter</button>
+      <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Créer un compte</button>
+    </div>
+
+    <!-- Login form -->
+    <form id="loginForm" onsubmit="submitLogin(event)">
+      <div class="field-group">
+        <label>Adresse email</label>
+        <input type="email" id="loginEmail" required placeholder="exemple@email.com" autocomplete="email" />
+      </div>
+      <div class="field-group">
+        <label>Mot de passe</label>
+        <div class="password-wrap">
+          <input type="password" id="loginPassword" required placeholder="Votre mot de passe" />
+          <button type="button" class="toggle-pw" onclick="togglePw('loginPassword')">👁</button>
+        </div>
+      </div>
+      <div id="loginError" class="auth-error hidden"></div>
+      <button type="submit" class="btn-auth" id="loginBtn">Se connecter</button>
+      <p class="auth-switch">Pas encore de compte ? <a href="#" onclick="switchAuthTab('register')">Créer un compte</a></p>
+    </form>
+
+    <!-- Register form -->
+    <form id="registerForm" class="hidden" onsubmit="submitRegister(event)">
+      <div class="form-row-2">
+        <div class="field-group">
+          <label>Nom complet *</label>
+          <input type="text" id="regName" required placeholder="Jean Dupont" />
+        </div>
+        <div class="field-group">
+          <label>Téléphone *</label>
+          <input type="tel" id="regPhone" required placeholder="06 XX XX XX" />
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Adresse email *</label>
+        <input type="email" id="regEmail" required placeholder="exemple@email.com" autocomplete="email" />
+      </div>
+      <div class="field-group">
+        <label>Mot de passe *</label>
+        <div class="password-wrap">
+          <input type="password" id="regPassword" required placeholder="Minimum 6 caractères" />
+          <button type="button" class="toggle-pw" onclick="togglePw('regPassword')">👁</button>
+        </div>
+        <div class="pw-strength" id="pwStrength"></div>
+      </div>
+      <div id="registerError" class="auth-error hidden"></div>
+      <button type="submit" class="btn-auth" id="registerBtn">Créer mon compte</button>
+      <p class="auth-switch">Déjà un compte ? <a href="#" onclick="switchAuthTab('login')">Se connecter</a></p>
+    </form>
+  </div>
+
+  <div class="auth-admin-link">
+    <button class="btn-admin-entry" onclick="showAdminLogin()">⚙ Espace administrateur</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     CLIENT APP — shown when logged in
+════════════════════════════════════════════════════════ -->
+<div id="clientApp" class="hidden">
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-logo" onclick="showView('home')">
+        <span>📚</span>
+        <div>
+          <span class="tl-title">Librairie Mayombe</span>
+          <span class="tl-sub">Pointe-Noire</span>
+        </div>
+      </div>
+      <div class="topbar-search">
+        <input type="text" id="globalSearch" placeholder="Rechercher un livre, un auteur…" oninput="handleSearch()" />
+        <button class="search-btn" onclick="handleSearch()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+      </div>
+      <div class="topbar-right">
+        <div class="user-pill" onclick="toggleUserMenu()">
+          <span class="user-avatar" id="userAvatar"></span>
+          <span id="userNameDisplay"></span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        <div class="user-dropdown hidden" id="userDropdown">
+          <div class="dropdown-header" id="dropdownHeader"></div>
+          <hr />
+          <button onclick="showView('orders')">📦 Mes commandes</button>
+          <button onclick="logout()">🚪 Déconnexion</button>
+        </div>
+        <button class="cart-btn" onclick="showView('cart')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          Panier
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
+    <nav class="subnav">
+      <div class="subnav-inner">
+        <button class="snav active" data-view="home" onclick="showView('home')">Accueil</button>
+        <button class="snav" data-view="catalogue" onclick="showView('catalogue')">Catalogue</button>
+        <button class="snav" data-view="orders" onclick="showView('orders')">Mes commandes</button>
+        <button class="snav" data-view="about" onclick="showView('about')">À propos</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- VIEWS -->
+  <main class="app-main">
+
+    <!-- VIEW: Home -->
+    <div id="view-home" class="view active">
+      <div class="hero-section">
+        <div class="hero-copy">
+          <p class="hero-eyebrow">Librairie en ligne · Pointe-Noire</p>
+          <h1>Des livres pour <span>chaque passion</span></h1>
+          <p class="hero-desc">Catalogues, classiques, développement personnel… Livraison rapide dans votre quartier.</p>
+          <div class="hero-ctas">
+            <button class="btn-primary" onclick="showView('catalogue')">Explorer le catalogue</button>
+            <button class="btn-ghost" onclick="showView('about')">En savoir plus</button>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="book-stack">
+            <div class="bs-book bs1">📖</div>
+            <div class="bs-book bs2">📚</div>
+            <div class="bs-book bs3">📕</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="adsStrip" class="ads-strip"></div>
+
+      <div class="home-section">
+        <div class="section-head">
+          <h2>Catégories</h2>
+        </div>
+        <div class="cat-chips" id="homeCatChips"></div>
+      </div>
+
+      <div class="home-section">
+        <div class="section-head">
+          <h2>Nouveautés & Populaires</h2>
+          <button class="btn-link" onclick="showView('catalogue')">Voir tout →</button>
+        </div>
+        <div class="books-row" id="homeBooks"></div>
+      </div>
+    </div>
+
+    <!-- VIEW: Catalogue -->
+    <div id="view-catalogue" class="view">
+      <div class="catalogue-wrap">
+        <aside class="cat-sidebar">
+          <h3>Catégories</h3>
+          <ul id="sidebarCats"></ul>
+        </aside>
+        <div class="catalogue-body">
+          <div class="cat-bar">
+            <h2 id="catTitle">Tous les livres</h2>
+            <span class="count-pill" id="catCount"></span>
+          </div>
+          <div class="books-grid" id="catalogueGrid"></div>
+          <p class="empty-msg hidden" id="catalogueEmpty">Aucun résultat trouvé.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW: Book Detail -->
+    <div id="view-book" class="view">
+      <div class="book-detail-wrap" id="bookDetailWrap"></div>
+    </div>
+
+    <!-- VIEW: Cart -->
+    <div id="view-cart" class="view">
+      <div class="page-wrap narrow">
+        <h1 class="page-h1">Mon panier</h1>
+        <div class="cart-layout" id="cartLayout">
+          <div class="cart-items" id="cartItems"></div>
+          <div class="cart-aside" id="cartAside"></div>
+        </div>
+        <div class="cart-empty hidden" id="cartEmpty">
+          <div class="empty-icon">🛒</div>
+          <h3>Votre panier est vide</h3>
+          <p>Parcourez notre catalogue pour trouver votre prochain livre.</p>
+          <button class="btn-primary" onclick="showView('catalogue')">Explorer le catalogue</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW: Checkout -->
+    <div id="view-checkout" class="view">
+      <div class="page-wrap narrow">
+        <h1 class="page-h1">Finaliser la commande</h1>
+        <div class="checkout-layout">
+          <div class="checkout-form-col">
+            <form id="checkoutForm" onsubmit="submitOrder(event)">
+              <div class="form-section">
+                <h3>Vos informations</h3>
+                <div class="form-row-2">
+                  <div class="field-group">
+                    <label>Nom complet *</label>
+                    <input type="text" id="ckName" required />
+                  </div>
+                  <div class="field-group">
+                    <label>Téléphone *</label>
+                    <input type="tel" id="ckPhone" required />
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label>Email</label>
+                  <input type="email" id="ckEmail" />
+                </div>
+              </div>
+              <div class="form-section">
+                <h3>Zone de livraison</h3>
+                <div class="delivery-notice">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  Livraison dans les zones : <strong>Potopoto la gare, Total vers Saint-Exupérie, Présidence, OSH, CHU uniquement.</strong>
+                </div>
+                <div class="field-group">
+                  <label>Zone *</label>
+                  <select id="ckZone" required onchange="onZoneChange()">
+                    <option value="">Sélectionner une zone</option>
+                  </select>
+                </div>
+                <div id="zoneAlert" class="zone-alert hidden"></div>
+                <div class="field-group">
+                  <label>Adresse précise *</label>
+                  <input type="text" id="ckAddress" required placeholder="Rue, repère, quartier précis…" />
+                </div>
+              </div>
+              <button type="submit" class="btn-primary full" id="ckSubmit">Confirmer la commande</button>
+            </form>
+          </div>
+          <div class="checkout-summary-col" id="checkoutSummary"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW: Confirmation -->
+    <div id="view-confirmation" class="view">
+      <div class="page-wrap narrow center-text">
+        <div class="confirm-check">✅</div>
+        <h1>Commande confirmée !</h1>
+        <p id="confirmInfo" class="confirm-info"></p>
+        <div class="timer-box" id="timerBox"></div>
+        <div class="confirm-actions">
+          <button class="btn-primary" id="dlReceiptBtn">⬇ Télécharger le reçu PDF</button>
+          <button class="btn-outline-danger" id="cancelOrderBtn">Annuler la commande</button>
+        </div>
+        <button class="btn-link mt-1" onclick="showView('orders')">Voir mes commandes →</button>
+      </div>
+    </div>
+
+    <!-- VIEW: My Orders -->
+    <div id="view-orders" class="view">
+      <div class="page-wrap">
+        <h1 class="page-h1">Mes commandes</h1>
+        <div id="ordersList"></div>
+      </div>
+    </div>
+
+    <!-- VIEW: Order Tracking -->
+    <div id="view-tracking" class="view">
+      <div class="page-wrap narrow">
+        <button class="btn-back" onclick="showView('orders')">← Retour</button>
+        <div id="trackingContent"></div>
+      </div>
+    </div>
+
+    <!-- VIEW: About -->
+    <div id="view-about" class="view">
+      <div class="page-wrap narrow">
+        <h1 class="page-h1">À propos</h1>
+        <div class="about-grid">
+          <div class="about-card">
+            <span class="about-icon">📍</span>
+            <h3>Zones livrées</h3>
+            <ul>
+              <li>Potopoto la gare</li>
+              <li>Total vers Saint-Exupérie</li>
+              <li>Présidence</li><li>OSH</li><li>CHU</li>
+            </ul>
+          </div>
+          <div class="about-card">
+            <span class="about-icon">💳</span>
+            <h3>Paiement</h3>
+            <p>Paiement uniquement en <strong>espèces à la livraison</strong>. Aucune carte requise.</p>
+          </div>
+          <div class="about-card">
+            <span class="about-icon">⏱</span>
+            <h3>Annulation</h3>
+            <p><strong>5 minutes</strong> pour annuler après validation. Passé ce délai, la commande est traitée.</p>
+          </div>
+          <div class="about-card">
+            <span class="about-icon">📞</span>
+            <h3>Contact</h3>
+            <p>Librairie Mayombe, Pointe-Noire, Congo-Brazzaville.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <div>
+        <strong>📚 Librairie Mayombe</strong>
+        <p>Pointe-Noire, Congo-Brazzaville</p>
+      </div>
+      <div>
+        <strong>Zones desservies</strong>
+        <p>Potopoto · Saint-Exupérie · Présidence · OSH · CHU</p>
+      </div>
+      <div>
+        <strong>Horaires</strong>
+        <p>Lun–Sam : 8h–20h</p>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Librairie Mayombe. Tous droits réservés.</div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     ADMIN APP — completely separate layout
+════════════════════════════════════════════════════════ -->
+<div id="adminApp" class="hidden">
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="admin-brand">
+        <span>📚</span>
+        <div>
+          <span class="ab-title">Mayombe</span>
+          <span class="ab-role">Administrateur</span>
+        </div>
+      </div>
+      <nav class="admin-nav">
+        <button class="anav active" data-tab="dashboard" onclick="switchAdminTab('dashboard')">
+          <span>📊</span> Tableau de bord
+        </button>
+        <button class="anav" data-tab="users" onclick="switchAdminTab('users')">
+          <span>👥</span> Utilisateurs
+        </button>
+        <button class="anav" data-tab="books" onclick="switchAdminTab('books')">
+          <span>📚</span> Livres
+        </button>
+        <button class="anav" data-tab="orders" onclick="switchAdminTab('orders')">
+          <span>📦</span> Commandes
+        </button>
+        <button class="anav" data-tab="ads" onclick="switchAdminTab('ads')">
+          <span>📢</span> Publicités
+        </button>
+      </nav>
+      <div class="admin-sidebar-footer">
+        <button class="anav-logout" onclick="adminLogout()">🚪 Déconnexion</button>
+        <button class="anav-download" onclick="downloadSource()">
+          ⬇ Télécharger le code source
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <div class="admin-main">
+      <div class="admin-topbar">
+        <h1 id="adminTabTitle">Tableau de bord</h1>
+        <span class="admin-badge">Admin connecté</span>
+      </div>
+
+      <!-- Tab: Dashboard -->
+      <div id="atab-dashboard" class="atab active">
+        <div class="stat-cards" id="statCards"></div>
+        <div class="dash-recent">
+          <h3>Commandes récentes</h3>
+          <div id="recentOrders"></div>
+        </div>
+      </div>
+
+      <!-- Tab: Users -->
+      <div id="atab-users" class="atab">
+        <div class="atab-header">
+          <h3>Liste des utilisateurs</h3>
+          <span class="count-pill" id="usersCount"></span>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>#</th><th>Nom</th><th>Email</th><th>Téléphone</th><th>Commandes</th><th>Dépenses</th><th>Inscrit le</th><th>Détail</th></tr></thead>
+            <tbody id="adminUsersBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab: Books -->
+      <div id="atab-books" class="atab">
+        <div class="atab-header">
+          <h3>Gestion des livres</h3>
+          <button class="btn-primary sm" onclick="openBookForm()">+ Ajouter un livre</button>
+        </div>
+
+        <!-- Book form -->
+        <div id="adminBookForm" class="admin-form-card hidden">
+          <h4 id="bookFormLabel">Ajouter un livre</h4>
+          <form onsubmit="saveBook(event)" id="bkForm">
+            <input type="hidden" id="bkId" />
+            <div class="form-row-2">
+              <div class="field-group"><label>Titre *</label><input type="text" id="bkTitle" required /></div>
+              <div class="field-group"><label>Auteur *</label><input type="text" id="bkAuthor" required /></div>
+            </div>
+            <div class="form-row-2">
+              <div class="field-group">
+                <label>Prix (FCFA) *</label><input type="number" id="bkPrice" required min="0" />
+              </div>
+              <div class="field-group">
+                <label>Catégorie *</label>
+                <input list="catDl" id="bkCategory" required placeholder="ex : Littérature" />
+                <datalist id="catDl"></datalist>
+              </div>
+            </div>
+            <div class="field-group"><label>Description</label><textarea id="bkDesc" rows="3"></textarea></div>
+            <div class="form-row-2">
+              <div class="field-group"><label>Stock</label><input type="number" id="bkStock" value="10" min="0" /></div>
+              <div class="field-group"><label>Image de couverture</label><input type="file" id="bkImage" accept="image/*" /></div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-outline" onclick="closeBookForm()">Annuler</button>
+              <button type="submit" class="btn-primary sm">💾 Enregistrer</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="adminBooksTable">
+            <thead><tr><th>Livre</th><th>Catégorie</th><th>Prix</th><th>Stock</th><th>Actions</th></tr></thead>
+            <tbody id="adminBooksBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab: Orders -->
+      <div id="atab-orders" class="atab">
+        <div class="atab-header">
+          <h3>Toutes les commandes</h3>
+          <div class="filter-group">
+            <select id="orderFilter" onchange="loadAdminOrders()">
+              <option value="">Tous les statuts</option>
+              <option value="pending">En attente</option>
+              <option value="confirmed">Confirmée</option>
+              <option value="shipping">En livraison</option>
+              <option value="delivered">Livrée</option>
+              <option value="cancelled">Annulée</option>
+            </select>
+          </div>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="adminOrdersTable">
+            <thead><tr><th>#</th><th>Client</th><th>Zone</th><th>Produits</th><th>Total</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="adminOrdersBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab: Ads -->
+      <div id="atab-ads" class="atab">
+        <div class="atab-header"><h3>Gestion des publicités</h3></div>
+        <div class="admin-form-card">
+          <h4>Nouvelle publicité</h4>
+          <form onsubmit="createAd(event)">
+            <div class="form-row-2">
+              <div class="field-group"><label>Titre *</label><input type="text" id="adTitle" required /></div>
+              <div class="field-group"><label>Image</label><input type="file" id="adImage" accept="image/*" /></div>
+            </div>
+            <div class="field-group"><label>Contenu *</label><textarea id="adContent" required rows="3"></textarea></div>
+            <button type="submit" class="btn-primary sm">📢 Publier</button>
+          </form>
+        </div>
+        <div id="adminAdsList" class="ads-admin-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     MODALS
+════════════════════════════════════════════════════════ -->
+<!-- Admin login modal -->
+<div class="modal-backdrop hidden" id="modalAdminLogin">
+  <div class="modal-box sm">
+    <div class="modal-head">
+      <h3>⚙ Connexion Admin</h3>
+      <button class="modal-close" onclick="closeModal('modalAdminLogin')">✕</button>
+    </div>
+    <div class="field-group mt-1">
+      <label>Mot de passe administrateur</label>
+      <div class="password-wrap">
+        <input type="password" id="adminPwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doAdminLogin()" />
+        <button type="button" class="toggle-pw" onclick="togglePw('adminPwd')">👁</button>
+      </div>
+    </div>
+    <div id="adminLoginError" class="auth-error hidden"></div>
+    <div class="modal-footer">
+      <button class="btn-outline" onclick="closeModal('modalAdminLogin')">Annuler</button>
+      <button class="btn-primary sm" onclick="doAdminLogin()">Connexion</button>
+    </div>
+  </div>
+</div>
+
+<!-- Review modal -->
+<div class="modal-backdrop hidden" id="modalReview">
+  <div class="modal-box sm">
+    <div class="modal-head">
+      <h3>Laisser un avis</h3>
+      <button class="modal-close" onclick="closeModal('modalReview')">✕</button>
+    </div>
+    <input type="hidden" id="rvBookId" />
+    <div class="field-group mt-1">
+      <label>Note *</label>
+      <div class="star-row" id="starRow">
+        <span class="s" data-v="1">★</span><span class="s" data-v="2">★</span>
+        <span class="s" data-v="3">★</span><span class="s" data-v="4">★</span>
+        <span class="s" data-v="5">★</span>
+      </div>
+      <input type="hidden" id="rvRating" value="0" />
+    </div>
+    <div class="field-group">
+      <label>Commentaire</label>
+      <textarea id="rvComment" rows="3" placeholder="Votre avis sur ce livre…"></textarea>
+    </div>
+    <div id="rvError" class="auth-error hidden"></div>
+    <div class="modal-footer">
+      <button class="btn-outline" onclick="closeModal('modalReview')">Annuler</button>
+      <button class="btn-primary sm" onclick="submitReview()">Envoyer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Order status update modal (admin) -->
+<div class="modal-backdrop hidden" id="modalOrderStatus">
+  <div class="modal-box sm">
+    <div class="modal-head">
+      <h3>Mettre à jour la commande</h3>
+      <button class="modal-close" onclick="closeModal('modalOrderStatus')">✕</button>
+    </div>
+    <input type="hidden" id="updateOrderId" />
+    <div class="field-group mt-1">
+      <label>Nouveau statut</label>
+      <select id="newOrderStatus">
+        <option value="pending">En attente</option>
+        <option value="confirmed">Confirmée</option>
+        <option value="shipping">En livraison</option>
+        <option value="delivered">Livrée</option>
+        <option value="cancelled">Annulée</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label>Note de suivi</label>
+      <input type="text" id="trackingNote" placeholder="ex : En route, livraison sous 30 min" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn-outline" onclick="closeModal('modalOrderStatus')">Annuler</button>
+      <button class="btn-primary sm" onclick="doUpdateOrderStatus()">Mettre à jour</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Détail commande (admin) -->
+<div class="modal-backdrop hidden" id="modalOrderDetail">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="orderDetailTitle">Détail de la commande</h3>
+      <button class="modal-close" onclick="closeModal('modalOrderDetail')">✕</button>
+    </div>
+    <div id="orderDetailBody" class="modal-detail-body"></div>
+    <div class="modal-footer">
+      <button class="btn-outline" onclick="closeModal('modalOrderDetail')">Fermer</button>
+      <button class="btn-primary sm" id="orderDetailUpdateBtn">Mettre à jour le statut</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Détail livre (admin) -->
+<div class="modal-backdrop hidden" id="modalBookDetail">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="bookDetailTitle">Détail du livre</h3>
+      <button class="modal-close" onclick="closeModal('modalBookDetail')">✕</button>
+    </div>
+    <div id="bookDetailBody" class="modal-detail-body"></div>
+    <div class="modal-footer">
+      <button class="btn-outline" onclick="closeModal('modalBookDetail')">Fermer</button>
+      <button class="btn-primary sm" id="bookDetailEditBtn">✏️ Modifier</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Détail utilisateur (admin) -->
+<div class="modal-backdrop hidden" id="modalUserDetail">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="userDetailTitle">Fiche utilisateur</h3>
+      <button class="modal-close" onclick="closeModal('modalUserDetail')">✕</button>
+    </div>
+    <div id="userDetailBody" class="modal-detail-body"></div>
+    <div class="modal-footer">
+      <button class="btn-outline" onclick="closeModal('modalUserDetail')">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-stack" id="toastStack"></div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

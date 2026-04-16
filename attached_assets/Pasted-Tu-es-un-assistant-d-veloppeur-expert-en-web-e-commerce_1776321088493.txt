@@ -1,0 +1,37 @@
+Tu es un assistant développeur expert en web e-commerce. Améliore et restructure le code existant d’un site de librairie en ligne selon les spécifications suivantes :
+
+1. **Couleurs et design**
+   - Conserve les couleurs chaudes et vibrantes déjà présentes.
+   - Améliore le design pour un vrai site e-commerce moderne (mise en page responsive, catalogues clairs, boutons stylisés, navigation fluide).
+
+2. **Fonctionnalités client**
+   - Catalogue de produits avec recherche par catégorie.
+   - Panier avec ajout/suppression de produits.
+   - Passer commande avec délai d’annulation de 5 minutes.
+   - Lorsqu’une commande est validée, envoyer automatiquement un email avec les infos du produit et du client à : `moussokiexauce7@gmail.com`.
+   - Générer un reçu téléchargeable en PDF pour le client.
+   - Livraison possible uniquement dans la zone définie : **Potopoto la gare → Total vers Saint Exupérie, Présidence, OSH, CHU**.  
+     - Zone restreinte : le reste de la ville → achat impossible.
+   - Si hors zone livrable, afficher un message d’erreur clair.
+
+3. **Fonctionnalités administrateur**
+   - Ajouter un onglet spécial **Admin** protégé par mot de passe : `TAF1-FLEMME`.
+   - Dans cet onglet, l’admin peut :
+     - Ajouter un livre (image, description, prix, catégorie, infos supplémentaires).
+     - Modifier un livre existant.
+     - Supprimer un livre.
+   - Les livres ajoutés doivent apparaître automatiquement dans la bonne catégorie du catalogue.
+
+4. **Optimisation et déploiement**
+   - Supprime tous les éléments inutiles de webdev pour alléger le code.
+   - Rends le site déployable sur toutes les plateformes (hébergeurs classiques, Replit, Vercel, Netlify).
+   - Utilise des technologies standards (HTML, CSS, JS, Node.js/Express ou équivalent).
+   - Ajoute une base de données simple (SQLite ou MongoDB) pour gérer les livres et les commandes.
+
+5. **Extras utiles**
+   - Système d’avis clients (notation + commentaire).
+   - Gestion des publicités (admin peut publier/supprimer).
+   - Sécurité basique (validation des formulaires, protection des routes admin).
+   - Documentation claire dans le code pour chaque fonctionnalité.
+
+Objectif : produire un site e-commerce fonctionnel, robuste, esthétique et prêt à être déployé.

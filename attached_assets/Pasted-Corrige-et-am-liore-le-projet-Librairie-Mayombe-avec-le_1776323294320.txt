@@ -1,0 +1,30 @@
+Corrige et améliore le projet "Librairie Mayombe" avec les directives suivantes :
+
+1. **Accès admin au téléchargement du code source**
+   - Vérifie que la route `/api/download-source` lit correctement le cookie ou la session de l’utilisateur.
+   - Si `req.session.role === "admin"`, autoriser le téléchargement du ZIP.
+   - Sinon, renvoyer l’erreur "Accès administrateur requis".
+   - Assure-toi que le cookie de session est bien transmis lors du clic sur "Télécharger le code source".
+   - Cette option doit être visible et accessible uniquement dans l’interface administrateur.
+
+2. **Connexion/déconnexion utilisateur**
+   - Lorsqu’un utilisateur se déconnecte, ses informations de compte doivent être effacées de la session/cookie.
+   - À la reconnexion, la page de **connexion** doit récupérer les infos déjà créées (email, mot de passe hashé) depuis la base de données.
+   - Ne pas rediriger vers la page de création de compte si l’utilisateur existe déjà.
+   - Implémente une logique claire :  
+     - Si compte existe → page de connexion.  
+     - Si compte n’existe pas → page de création.
+
+3. **Cookies sécurisés**
+   - Implémente un système de cookies sécurisé :
+     - Les cookies gardent la session active du client (nom, email, ID utilisateur).
+     - Expiration configurable (ex. 7 jours).
+     - Utilise `httpOnly`, `secure` (désactivé en local), et `SameSite=strict`.
+
+4. **Interface Admin (vue détaillée)**
+   - Dans le tableau de bord admin, chaque section doit afficher les détails complets :
+     - **Utilisateurs** : liste avec nom, email, date de création, statut.
+     - **Livres** : tableau avec image, titre, prix, catégorie, options d’édition/suppression.
+     - **Commandes** : liste avec numéro de commande, client, produit, statut (En attente, Confirmée, En livraison, Livrée).
+     - **Publicités** : liste des bandeaux actifs avec options de suppression.
+   - Chaque objet doit être cliquable pour afficher une fiche détaillée (modal ou page dédiée).
