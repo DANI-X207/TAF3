@@ -1,0 +1,39 @@
+Corrige et améliore le projet "Librairie Mayombe" avec les directives suivantes :
+
+1. **Utilisateurs (admin)**
+   - Dans l’onglet "Utilisateurs", chaque ligne doit être cliquable.
+   - Affiche une fiche détaillée (modal ou page) avec : nom, email, téléphone, nombre de commandes, total dépensé, date d’inscription.
+   - Permets à l’admin de consulter et éventuellement désactiver un compte.
+
+2. **Commandes (double validation)**
+   - Ajoute un système de double validation :
+     - **Admin** : peut confirmer qu’une commande est bien livrée.
+     - **Client** : peut valider la réception depuis son interface.
+   - Si les deux validations sont correctes → la commande passe automatiquement dans la section **“Commandes validées”**.
+   - Si une seule validation est faite → la commande reste en attente.
+   - Ajoute un statut clair : En attente → Confirmée → En livraison → Validée.
+
+3. **Mot de passe oublié (triple vérification)**
+   - Quand le client clique sur "Mot de passe oublié", ouvre une fenêtre (modal).
+   - Demande trois champs obligatoires : Nom, Numéro de téléphone, Email.
+   - Vérifie en base de données que les trois informations concordent avec un utilisateur existant.
+   - Si les infos ne correspondent pas → afficher un message d’erreur.
+   - Si les infos correspondent → générer un token sécurisé (UUID ou crypto aléatoire) avec expiration (15 minutes).
+   - Affiche une nouvelle page avec un lien unique de réinitialisation :  
+     `https://tonsite.com/reset-password?token=XYZ`
+   - Ce lien permet au client de saisir un nouveau mot de passe.
+   - Hash le nouveau mot de passe (bcrypt) et mets à jour la base.
+   - Invalide les cookies/session après réinitialisation.
+
+4. **Avis clients (correction de l’erreur serveur)**
+   - Implémente une route backend `/api/reviews` qui accepte les avis (note + commentaire + ID du livre + ID utilisateur).
+   - Valide les données (note entre 1 et 5, commentaire non vide).
+   - Enregistre l’avis en base de données.
+   - Retourne une réponse JSON claire : `{success:true, message:"Avis enregistré"}`.
+   - Si erreur → retourner un message explicite au lieu de "Erreur serveur".
+   - Affiche immédiatement l’avis ajouté dans la section "Avis récents" du livre concerné.
+
+5. **Sécurité**
+   - Les tokens expirés sont invalidés.
+   - Les mots de passe sont toujours stockés hashés.
+   - Les cookies/session doivent être invalidés après réinitialisation.

@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Librairie Mayombe</title>
+  <link rel="icon" type="image/jpeg" href="/assets/magma-icon.jpeg" />
+  <link rel="apple-touch-icon" href="/assets/magma-icon.jpeg" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
@@ -15,7 +17,7 @@
 ════════════════════════════════════════════════════════ -->
 <div id="authWall" class="auth-wall">
   <div class="auth-brand">
-    <div class="auth-logo">📚</div>
+    <img class="auth-logo-img" src="/assets/magma-logo.jpeg" alt="Magma" />
     <h1>Librairie Mayombe</h1>
     <p>Votre destination livres en ligne à Pointe-Noire</p>
   </div>
@@ -87,7 +89,7 @@
   <header class="topbar">
     <div class="topbar-inner">
       <div class="topbar-logo" onclick="showView('home')">
-        <span>📚</span>
+        <img class="brand-mark" src="/assets/magma-logo.jpeg" alt="Magma" />
         <div>
           <span class="tl-title">Librairie Mayombe</span>
           <span class="tl-sub">Pointe-Noire</span>
@@ -144,10 +146,8 @@
           </div>
         </div>
         <div class="hero-visual">
-          <div class="book-stack">
-            <div class="bs-book bs1">📖</div>
-            <div class="bs-book bs2">📚</div>
-            <div class="bs-book bs3">📕</div>
+          <div class="hero-logo-card">
+            <img src="/assets/magma-logo.jpeg" alt="Magma" />
           </div>
         </div>
       </div>
@@ -183,7 +183,10 @@
             <span class="count-pill" id="catCount"></span>
           </div>
           <div class="books-grid" id="catalogueGrid"></div>
-          <p class="empty-msg hidden" id="catalogueEmpty">Aucun résultat trouvé.</p>
+          <div class="empty-msg hidden" id="catalogueEmpty">
+            <img class="empty-logo" src="/assets/magma-logo.jpeg" alt="Magma" />
+            <p>Aucun résultat trouvé.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -202,7 +205,7 @@
           <div class="cart-aside" id="cartAside"></div>
         </div>
         <div class="cart-empty hidden" id="cartEmpty">
-          <div class="empty-icon">🛒</div>
+          <img class="empty-logo" src="/assets/magma-logo.jpeg" alt="Magma" />
           <h3>Votre panier est vide</h3>
           <p>Parcourez notre catalogue pour trouver votre prochain livre.</p>
           <button class="btn-primary" onclick="showView('catalogue')">Explorer le catalogue</button>
@@ -297,7 +300,7 @@
         <h1 class="page-h1">À propos</h1>
         <div class="about-grid">
           <div class="about-card">
-            <span class="about-icon">📍</span>
+            <img class="about-icon-img" src="/assets/magma-logo.jpeg" alt="Magma" />
             <h3>Zones livrées</h3>
             <ul>
               <li>Potopoto la gare</li>
@@ -306,17 +309,17 @@
             </ul>
           </div>
           <div class="about-card">
-            <span class="about-icon">💳</span>
+            <img class="about-icon-img" src="/assets/magma-logo.jpeg" alt="Magma" />
             <h3>Paiement</h3>
             <p>Paiement uniquement en <strong>espèces à la livraison</strong>. Aucune carte requise.</p>
           </div>
           <div class="about-card">
-            <span class="about-icon">⏱</span>
+            <img class="about-icon-img" src="/assets/magma-logo.jpeg" alt="Magma" />
             <h3>Annulation</h3>
             <p><strong>5 minutes</strong> pour annuler après validation. Passé ce délai, la commande est traitée.</p>
           </div>
           <div class="about-card">
-            <span class="about-icon">📞</span>
+            <img class="about-icon-img" src="/assets/magma-logo.jpeg" alt="Magma" />
             <h3>Contact</h3>
             <p>Librairie Mayombe, Pointe-Noire, Congo-Brazzaville.</p>
           </div>
@@ -329,7 +332,7 @@
   <footer class="app-footer">
     <div class="footer-inner">
       <div>
-        <strong>📚 Librairie Mayombe</strong>
+        <strong class="footer-brand"><img src="/assets/magma-logo.jpeg" alt="Magma" /> Librairie Mayombe</strong>
         <p>Pointe-Noire, Congo-Brazzaville</p>
       </div>
       <div>
@@ -353,7 +356,7 @@
     <!-- Sidebar -->
     <aside class="admin-sidebar">
       <div class="admin-brand">
-        <span>📚</span>
+        <img class="brand-mark" src="/assets/magma-logo.jpeg" alt="Magma" />
         <div>
           <span class="ab-title">Mayombe</span>
           <span class="ab-role">Administrateur</span>

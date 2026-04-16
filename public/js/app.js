@@ -11,6 +11,7 @@ let isAdmin = false;
 let currentCategory = 'all';
 let currentOrderId = null;
 let cancelTimer = null;
+const BRAND_LOGO = '/assets/magma-logo.jpeg';
 
 // ─── Bootstrap ────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -300,8 +301,8 @@ function bookCardHTML(b) {
     <div class="bcard" onclick="openBook(${b.id})">
       <div class="bcard-cover">
         ${b.image_url
-          ? `<img src="${b.image_url}" alt="${b.title}" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'" /><div class="bcard-cover-fb" style="display:none">📖</div>`
-          : `<div class="bcard-cover-fb">📖</div>`}
+          ? `<img src="${b.image_url}" alt="${b.title}" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'" /><div class="bcard-cover-fb" style="display:none"><img src="${BRAND_LOGO}" alt="Magma" /></div>`
+          : `<div class="bcard-cover-fb"><img src="${BRAND_LOGO}" alt="Magma" /></div>`}
         <span class="bcard-badge">${b.category}</span>
       </div>
       <div class="bcard-body">
@@ -343,7 +344,7 @@ async function openBook(id) {
     <button class="btn-back" onclick="history.back()">← Retour</button>
     <div class="bdetail">
       <div class="bdetail-cover">
-        ${b.image_url ? `<img src="${b.image_url}" alt="${b.title}" />` : '📖'}
+        ${b.image_url ? `<img src="${b.image_url}" alt="${b.title}" />` : `<img class="fallback-logo" src="${BRAND_LOGO}" alt="Magma" />`}
       </div>
       <div class="bdetail-info">
         <span class="bdetail-cat">${b.category}</span>
@@ -416,7 +417,7 @@ function renderCart() {
   items.innerHTML = cart.map(i => `
     <div class="cart-item">
       <div class="ci-img">
-        ${i.image_url ? `<img src="${i.image_url}" alt="${i.title}" />` : '📖'}
+        ${i.image_url ? `<img src="${i.image_url}" alt="${i.title}" />` : `<img class="fallback-logo" src="${BRAND_LOGO}" alt="Magma" />`}
       </div>
       <div class="ci-info">
         <div class="ci-title">${i.title}</div>
@@ -570,7 +571,7 @@ async function loadMyOrders() {
   const orders = await api('/api/orders/mine');
   const container = document.getElementById('ordersList');
   if (!orders.length) {
-    container.innerHTML = '<div class="cart-empty"><div class="empty-icon">📦</div><h3>Aucune commande</h3><p>Vous n\'avez pas encore passé de commande.</p><button class="btn-primary" onclick="showView(\'catalogue\')">Découvrir les livres</button></div>';
+    container.innerHTML = `<div class="cart-empty"><img class="empty-logo" src="${BRAND_LOGO}" alt="Magma" /><h3>Aucune commande</h3><p>Vous n'avez pas encore passé de commande.</p><button class="btn-primary" onclick="showView('catalogue')">Découvrir les livres</button></div>`;
     return;
   }
   container.innerHTML = orders.map(o => {
@@ -741,7 +742,7 @@ async function loadAdminDashboard() {
   const stats = await adminApi('/api/admin/stats');
   document.getElementById('statCards').innerHTML = `
     <div class="stat-card" onclick="switchAdminTab('books')" style="cursor:pointer">
-      <div class="sc-label">Livres</div><div class="sc-value">${stats.books}</div><span class="sc-icon">📚</span>
+      <div class="sc-label">Livres</div><div class="sc-value">${stats.books}</div><img class="sc-logo" src="${BRAND_LOGO}" alt="Magma" />
     </div>
     <div class="stat-card" onclick="switchAdminTab('users')" style="cursor:pointer">
       <div class="sc-label">Utilisateurs</div><div class="sc-value">${stats.users}</div><span class="sc-icon">👤</span>
@@ -828,7 +829,7 @@ async function loadAdminBooks() {
         <div style="display:flex;align-items:center;gap:0.8rem">
           ${b.image_url
             ? `<img src="${b.image_url}" class="admin-book-thumb" alt="" />`
-            : `<div class="admin-book-fallback">📖</div>`}
+            : `<div class="admin-book-fallback"><img src="${BRAND_LOGO}" alt="Magma" /></div>`}
           <div>
             <div style="font-weight:700;font-size:.92rem">${b.title}</div>
             <div style="font-size:.78rem;color:#999">${b.author}</div>
@@ -853,7 +854,7 @@ async function adminOpenBookDetail(id) {
   document.getElementById('bookDetailBody').innerHTML = `
     <div style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1rem">
       <div style="width:100px;height:140px;border-radius:8px;overflow:hidden;background:#f5f0e8;display:flex;align-items:center;justify-content:center;font-size:2.5rem;flex-shrink:0">
-        ${b.image_url ? `<img src="${b.image_url}" style="width:100%;height:100%;object-fit:cover" />` : '📖'}
+        ${b.image_url ? `<img src="${b.image_url}" style="width:100%;height:100%;object-fit:cover" />` : `<img src="${BRAND_LOGO}" alt="Magma" style="width:86%;height:auto;object-fit:contain" />`}
       </div>
       <div style="flex:1;min-width:200px">
         <div class="detail-grid">

@@ -55,7 +55,15 @@ ul { list-style: none; }
 }
 
 .auth-brand { text-align: center; color: white; }
-.auth-logo { font-size: 3.5rem; margin-bottom: 0.5rem; }
+.auth-logo-img {
+  width: 210px;
+  max-width: 70vw;
+  height: auto;
+  margin: 0 auto 0.8rem;
+  display: block;
+  border-radius: 18px;
+  box-shadow: 0 18px 42px rgba(0,0,0,0.22);
+}
 .auth-brand h1 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--orange); }
 .auth-brand p { font-size: 0.9rem; opacity: 0.75; margin-top: 0.3rem; }
 
@@ -179,6 +187,15 @@ ul { list-style: none; }
   display: flex; align-items: center; gap: 0.7rem;
   cursor: pointer; flex-shrink: 0; color: white;
 }
+.brand-mark {
+  width: 46px;
+  height: 34px;
+  object-fit: contain;
+  background: white;
+  border-radius: 10px;
+  padding: 4px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+}
 .topbar-logo > span { font-size: 1.8rem; }
 .tl-title { display: block; font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--orange); font-weight: 700; }
 .tl-sub { display: block; font-size: 0.68rem; color: rgba(255,255,255,0.55); }
@@ -283,6 +300,16 @@ ul { list-style: none; }
 .hero-desc { font-size: 1rem; opacity: 0.82; margin-bottom: 1.8rem; max-width: 500px; }
 .hero-ctas { display: flex; gap: 0.9rem; flex-wrap: wrap; }
 .hero-visual { flex-shrink: 0; position: relative; z-index: 1; }
+.hero-logo-card {
+  width: min(360px, 32vw);
+  min-width: 230px;
+  background: white;
+  border-radius: 28px;
+  padding: 2.2rem;
+  box-shadow: 0 22px 60px rgba(0,0,0,0.3);
+  transform: rotate(-3deg);
+}
+.hero-logo-card img { width: 100%; height: auto; display: block; }
 .book-stack { display: flex; gap: -10px; }
 .bs-book { font-size: 3.5rem; opacity: 0.5; }
 .bs2 { transform: rotate(-8deg) translateY(-10px); }
@@ -356,7 +383,14 @@ ul { list-style: none; }
 }
 .bcard-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.25s; }
 .bcard:hover .bcard-cover img { transform: scale(1.04); }
-.bcard-cover-fb { font-size: 3.5rem; opacity: 0.35; }
+.bcard-cover-fb {
+  width: 82%;
+  height: 82%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bcard-cover-fb img { max-width: 88%; max-height: 88%; object-fit: contain; opacity: 0.9; }
 .bcard-badge {
   position: absolute; top: 7px; left: 7px;
   background: var(--red); color: white;
@@ -405,6 +439,15 @@ ul { list-style: none; }
 .cat-bar h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--red); }
 .count-pill { background: var(--red); color: white; font-size: 0.75rem; padding: 2px 10px; border-radius: 50px; font-weight: 600; }
 .empty-msg { text-align: center; padding: 3rem; color: var(--text-l); font-size: 1rem; }
+.empty-logo {
+  width: 150px;
+  max-width: 60vw;
+  height: auto;
+  display: block;
+  margin: 0 auto 1rem;
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+}
 
 /* ── Book Detail ────────────────────────── */
 .book-detail-wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
@@ -422,6 +465,7 @@ ul { list-style: none; }
   display: flex; align-items: center; justify-content: center; font-size: 5rem;
 }
 .bdetail-cover img { width: 100%; height: 100%; object-fit: cover; }
+.bdetail-cover .fallback-logo { width: 82%; height: auto; object-fit: contain; }
 .bdetail-cat { display: inline-block; background: #fdf2eb; color: var(--red); border: 1px solid #f0d0b8; padding: 3px 12px; border-radius: 50px; font-size: 0.78rem; font-weight: 600; margin-bottom: 0.8rem; }
 .bdetail h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--text); margin-bottom: 6px; }
 .bdetail-author { font-size: 1rem; color: var(--text-l); margin-bottom: 0.8rem; }
@@ -457,6 +501,7 @@ ul { list-style: none; }
   font-size: 2rem; overflow: hidden;
 }
 .ci-img img { width: 100%; height: 100%; object-fit: cover; }
+.ci-img .fallback-logo { width: 84%; height: auto; object-fit: contain; }
 .ci-info { flex: 1; }
 .ci-title { font-weight: 700; font-size: 0.97rem; margin-bottom: 3px; }
 .ci-author { font-size: 0.8rem; color: var(--text-l); margin-bottom: 6px; }
@@ -574,6 +619,15 @@ ul { list-style: none; }
 .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; }
 .about-card { background: white; border-radius: var(--radius); border: 1px solid var(--border); padding: 1.5rem; box-shadow: var(--shadow-sm); }
 .about-icon { font-size: 2rem; display: block; margin-bottom: 0.7rem; }
+.about-icon-img {
+  width: 78px;
+  height: 50px;
+  object-fit: contain;
+  background: #fff8ee;
+  border-radius: 12px;
+  padding: 6px;
+  margin-bottom: 0.7rem;
+}
 .about-card h3 { font-weight: 700; margin-bottom: 0.5rem; color: var(--red); }
 .about-card ul li { font-size: 0.9rem; color: var(--text-m); padding: 3px 0; }
 .about-card p { font-size: 0.9rem; color: var(--text-m); }
@@ -701,6 +755,15 @@ ul { list-style: none; }
 .stat-card .sc-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-l); margin-bottom: 0.5rem; }
 .stat-card .sc-value { font-size: 2rem; font-weight: 800; color: var(--red); }
 .stat-card .sc-icon { font-size: 1.5rem; float: right; }
+.stat-card .sc-logo {
+  float: right;
+  width: 54px;
+  height: 34px;
+  object-fit: contain;
+  background: #fff8ee;
+  border-radius: 10px;
+  padding: 4px;
+}
 
 .dash-recent h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.8rem; }
 
@@ -713,7 +776,10 @@ ul { list-style: none; }
 .admin-table tr:hover td { background: #fdf9f5; }
 
 .admin-book-thumb { width: 42px; height: 54px; object-fit: cover; border-radius: 4px; background: #f5e8d8; }
-.admin-book-fallback { width: 42px; height: 54px; background: #f5e8d8; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+.admin-book-fallback { width: 42px; height: 54px; background: #f5e8d8; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; overflow: hidden; }
+.admin-book-fallback img { width: 88%; height: auto; object-fit: contain; }
+.footer-brand { display: inline-flex; align-items: center; gap: 0.45rem; }
+.footer-brand img { width: 56px; height: 34px; object-fit: contain; background: white; border-radius: 8px; padding: 3px; }
 
 /* ── Admin form card ────────────────────── */
 .admin-form-card { background: white; border-radius: var(--radius); border: 1px solid var(--border); padding: 1.5rem; margin-bottom: 1.2rem; box-shadow: var(--shadow-sm); }
